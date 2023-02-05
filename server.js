@@ -17,6 +17,8 @@ app.get("/notes", (req, res) => {
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/index.html"))
 })
+// post /api/notes fs readfile dbjson -- new note = req.body -- writefile db/db.json ??
+// get /api/notes fs readfile dbjson -- return as json
 
 app.listen(PORT, () => {
     console.log(`Listening on Port ${PORT}`)
