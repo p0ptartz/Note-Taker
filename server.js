@@ -1,6 +1,14 @@
 const express = require('express')
 const path = require('path')
 const fs = require("fs")
+const crypto = require("crypto")
+
+function id() {
+    return crypto.randomBytes(16).toString("hex");
+}
+
+
+
 
 
 const app = express()
@@ -33,6 +41,7 @@ app.post("/api/notes", (req, res) => {
     const newNote = {
         title,
         text,
+        id: id()
     }
     console.log(newNote)
     fs.readFile("./db/db.json", (err, data) => {
