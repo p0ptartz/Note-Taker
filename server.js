@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const fs = require("fs")
 
+
 const app = express()
 
 const PORT = 3200
@@ -14,11 +15,40 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/notes.html"))
 })
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/index.html"))
 })
-// post /api/notes fs readfile dbjson -- new note = req.body -- writefile db/db.json ??
+
+
 // get /api/notes fs readfile dbjson -- return as json
+app.get("/api/notes", (req, res) => {
+    fs.readFile("./db/db.json", (err, data) => {
+        res.json(JSON.parse(data))
+    })
+})
+
+// post /api/notes fs readfile dbjson -- new note = req.body -- writefile db/db.json ??
+app.post("/api/notes", (req, res) => {
+    const { title, text } = req.body
+    const newNote = {
+        title,
+        text,
+    }
+    console.log(newNote)
+    fs.readFile("./db/db.json", (err, data) => {
+        let noteText = JSON.parse(data)
+        console.log(noteText)
+        noteText.push(newNote)
+        fs.writeFile("./db/db.json", JSON.stringify(noteText, null, 4), (err) => {
+            console.log("check")
+        }
+        )
+    })
+})
+
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Listening on Port ${PORT}`)
