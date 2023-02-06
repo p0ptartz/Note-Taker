@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require("fs")
 const crypto = require("crypto")
 
+// function to generate rando id number to link to db.json file
 function id() {
     return crypto.randomBytes(16).toString("hex");
 }
@@ -24,26 +25,27 @@ app.get("/", (req, res) => {
 })
 
 
-// get /api/notes fs readfile dbjson -- return as json
 app.get("/api/notes", (req, res) => {
     fs.readFile("./db/db.json", (err, data) => {
         res.json(JSON.parse(data))
     })
 })
 
-// post /api/notes fs readfile dbjson -- new note = req.body -- writefile db/db.json ??
+
 app.post("/api/notes", (req, res) => {
+    // deconstructing req.body to store in new var with id added as well
     const { title, text } = req.body
     const newNote = {
         title,
         text,
         id: id()
     }
-    console.log(newNote)
     fs.readFile("./db/db.json", (err, data) => {
+        // parsing data for db.json and storing it in new variable 
         let noteText = JSON.parse(data)
-        console.log(noteText)
+        // placing data into new note object
         noteText.push(newNote)
+        // writes new info into db.json
         fs.writeFile("./db/db.json", JSON.stringify(noteText, null, 4), (err) => {
             if (err) {
                 throw err
@@ -54,6 +56,7 @@ app.post("/api/notes", (req, res) => {
         )
     })
 })
+
 
 app.listen(PORT, () => {
     console.log(`Listening on Port ${PORT}`)
