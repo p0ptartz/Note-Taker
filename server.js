@@ -7,10 +7,6 @@ function id() {
     return crypto.randomBytes(16).toString("hex");
 }
 
-
-
-
-
 const app = express()
 
 const PORT = 3200
@@ -49,15 +45,15 @@ app.post("/api/notes", (req, res) => {
         console.log(noteText)
         noteText.push(newNote)
         fs.writeFile("./db/db.json", JSON.stringify(noteText, null, 4), (err) => {
-            console.log("check")
+            if (err) {
+                throw err
+            } else {
+                res.json("Note Saved!")
+            }
         }
         )
     })
 })
-
-
-
-
 
 app.listen(PORT, () => {
     console.log(`Listening on Port ${PORT}`)
