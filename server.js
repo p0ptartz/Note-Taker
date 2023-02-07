@@ -31,7 +31,6 @@ app.get("/api/notes", (req, res) => {
     })
 })
 
-
 app.post("/api/notes", (req, res) => {
     // deconstructing req.body to store in new var with id added as well
     const { title, text } = req.body
